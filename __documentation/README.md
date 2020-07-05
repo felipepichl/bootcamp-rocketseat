@@ -9,3 +9,7 @@
 remove `ormconfig.json` git.
 
 `git rm --cached ormconfig.json`
+
+# Class Transformers
+
+`secret: process.env.APP_SECRET || 'default'`
