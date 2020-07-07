@@ -13,3 +13,7 @@ remove `ormconfig.json` git.
 # Class Transformers
 
 `secret: process.env.APP_SECRET || 'default'`
+
+# Configuring cache
+
+`docker run --name gostack-redis -p 6379:6379 -d -t redis:alpine`
