@@ -70,7 +70,7 @@ class CreateAppointmentService {
       recipient_id: provider_id,
     });
 
-    await this.cacheProvider.invalidatePrefix(
+    await this.cacheProvider.invalidate(
       `provider-appointments:${provider_id}:${format(
         appointmentDate,
         'yyyy-M-d',
