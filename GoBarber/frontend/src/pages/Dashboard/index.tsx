@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { FiPower, FiClock } from 'react-icons/fi';
 import {
@@ -9,6 +9,8 @@ import {
   Content,
   Schedule,
   NextAppointment,
+  Section,
+  Appointment,
   Calendar,
 } from './styles';
 
@@ -16,6 +18,7 @@ import logoImg from '../../assets/logo.svg';
 import { useAuth } from '../../hooks/auth';
 
 const Dashboard: React.FC = () => {
+  const [seletedDate, setSelectedDate] = useState(new Date());
   const { signOut, user } = useAuth();
 
   return (
@@ -63,6 +66,62 @@ const Dashboard: React.FC = () => {
               </span>
             </div>
           </NextAppointment>
+
+          <Section>
+            <strong>Manhã</strong>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars3.githubusercontent.com/u/22602639?s=460&u=2c1bec46e256602d1dd5f173b152233fc58f2855&v=4"
+                  alt="Felipe Pichl"
+                />
+
+                <strong>Felipe Pichl</strong>
+              </div>
+            </Appointment>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars3.githubusercontent.com/u/22602639?s=460&u=2c1bec46e256602d1dd5f173b152233fc58f2855&v=4"
+                  alt="Felipe Pichl"
+                />
+
+                <strong>Felipe Pichl</strong>
+              </div>
+            </Appointment>
+          </Section>
+
+          <Section>
+            <strong>Tarde</strong>
+
+            <Appointment>
+              <span>
+                <FiClock />
+                08:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars3.githubusercontent.com/u/22602639?s=460&u=2c1bec46e256602d1dd5f173b152233fc58f2855&v=4"
+                  alt="Felipe Pichl"
+                />
+
+                <strong>Felipe Pichl</strong>
+              </div>
+            </Appointment>
+          </Section>
           <Calendar />
         </Schedule>
       </Content>
