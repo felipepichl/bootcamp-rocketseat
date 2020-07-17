@@ -1,12 +1,11 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { isToday, format } from 'date-fns';
+import { isToday, format, parseISO, isAfter } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
 import { FiPower, FiClock } from 'react-icons/fi';
 
-import { parseISO } from 'date-fns/esm';
 import {
   Container,
   Header,
@@ -45,14 +44,14 @@ const Dashboard: React.FC = () => {
   const [seletedDate, setSelectedDate] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  const [appoitments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   const [monthAvailability, setMonthAvailability] = useState<
     MonthAvailabilityItem[]
   >([]);
 
-  const handleDayChange = useCallback((day: Date, modifiers: DayModifiers) => {
-    if (modifiers.available) {
+  const handleDateChange = useCallback((day: Date, modifiers: DayModifiers) => {
+    if (modifiers.available && !modifiers.disabled) {
       setSelectedDate(day);
     }
   }, []);
@@ -120,16 +119,22 @@ const Dashboard: React.FC = () => {
   }, [seletedDate]);
 
   const morningAppointments = useMemo(() => {
-    return appoitments.filter((appointment) => {
+    return appointments.filter((appointment) => {
       return parseISO(appointment.date).getHours() < 12;
     });
-  }, [appoitments]);
+  }, [appointments]);
 
   const afternoonAppointments = useMemo(() => {
-    return appoitments.filter((appointment) => {
+    return appointments.filter((appointment) => {
       return parseISO(appointment.date).getHours() >= 12;
     });
-  }, [appoitments]);
+  }, [appointments]);
+
+  const nextAppointment = useMemo(() => {
+    return appointments.find((appointment) => {
+      return isAfter(parseISO(appointment.date), new Date());
+    });
+  }, [appointments]);
 
   return (
     <Container>
@@ -168,24 +173,34 @@ const Dashboard: React.FC = () => {
             <span>{selectedWeekDay}</span>
           </p>
 
-          <NextAppointment>
-            <strong>Atendimento a seguir</strong>
-            <div>
-              <img
-                src="https://avatars3.githubusercontent.com/u/22602639?s=460&u=2c1bec46e256602d1dd5f173b152233fc58f2855&v=4"
-                alt="Felipe Pichl"
-              />
+          {isToday(seletedDate) && nextAppointment && (
+            <NextAppointment>
+              <strong>Agendamento a seguir</strong>
+              <div>
+                <img
+                  src={
+                    nextAppointment.user.avatar_url
+                      ? nextAppointment.user.avatar_url
+                      : 'https://api.adorable.io/avatars/60/abott@adorable.png'
+                  }
+                  alt={nextAppointment.user.name}
+                />
 
-              <strong>Felipe Pichl</strong>
-              <span>
-                <FiClock />
-                08:00
-              </span>
-            </div>
-          </NextAppointment>
+                <strong>{nextAppointment.user.name}</strong>
+                <span>
+                  <FiClock />
+                  {nextAppointment.hourFormatted}
+                </span>
+              </div>
+            </NextAppointment>
+          )}
 
           <Section>
             <strong>Manhã</strong>
+
+            {morningAppointments.length === 0 && (
+              <p>Nenhum agendamento neste período</p>
+            )}
 
             {morningAppointments.map((appointment) => (
               <Appointment key={appointment.id}>
@@ -212,6 +227,10 @@ const Dashboard: React.FC = () => {
 
           <Section>
             <strong>Tarde</strong>
+
+            {afternoonAppointments.length === 0 && (
+              <p>Nenhum agendamento neste período</p>
+            )}
 
             {afternoonAppointments.map((appointment) => (
               <Appointment key={appointment.id}>
@@ -246,7 +265,7 @@ const Dashboard: React.FC = () => {
             }}
             onMonthChange={handleMonthChange}
             selectedDays={seletedDate}
-            onDayClick={handleDayChange}
+            onDayClick={handleDateChange}
             months={[
               'Janeiro',
               'Fevereiro',
