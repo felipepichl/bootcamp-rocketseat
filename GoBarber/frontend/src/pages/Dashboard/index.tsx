@@ -6,6 +6,7 @@ import 'react-day-picker/lib/style.css';
 
 import { FiPower, FiClock } from 'react-icons/fi';
 
+import { parseISO } from 'date-fns/esm';
 import {
   Container,
   Header,
@@ -31,6 +32,7 @@ interface MonthAvailabilityItem {
 interface Appointment {
   id: string;
   date: string;
+  hourFormatted: string;
   user: {
     name: string;
     avatar_url: string;
@@ -74,7 +76,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     api
-      .get('/appointments/me', {
+      .get<Appointment[]>('/appointments/me', {
         params: {
           year: seletedDate.getFullYear(),
           month: seletedDate.getMonth() + 1,
@@ -82,7 +84,13 @@ const Dashboard: React.FC = () => {
         },
       })
       .then((response) => {
-        setAppointments(response.data);
+        const appointmentsFormatted = response.data.map((appointment) => {
+          return {
+            ...appointment,
+            hourFormatted: format(parseISO(appointment.date), 'HH:mm'),
+          };
+        });
+        setAppointments(appointmentsFormatted);
       });
   }, [seletedDate]);
 
@@ -110,6 +118,18 @@ const Dashboard: React.FC = () => {
       locale: ptBR,
     });
   }, [seletedDate]);
+
+  const morningAppointments = useMemo(() => {
+    return appoitments.filter((appointment) => {
+      return parseISO(appointment.date).getHours() < 12;
+    });
+  }, [appoitments]);
+
+  const afternoonAppointments = useMemo(() => {
+    return appoitments.filter((appointment) => {
+      return parseISO(appointment.date).getHours() >= 12;
+    });
+  }, [appoitments]);
 
   return (
     <Container>
@@ -167,57 +187,53 @@ const Dashboard: React.FC = () => {
           <Section>
             <strong>Manhã</strong>
 
-            <Appointment>
-              <span>
-                <FiClock />
-                08:00
-              </span>
+            {morningAppointments.map((appointment) => (
+              <Appointment key={appointment.id}>
+                <span>
+                  <FiClock />
+                  {appointment.hourFormatted}
+                </span>
 
-              <div>
-                <img
-                  src="https://avatars3.githubusercontent.com/u/22602639?s=460&u=2c1bec46e256602d1dd5f173b152233fc58f2855&v=4"
-                  alt="Felipe Pichl"
-                />
+                <div>
+                  <img
+                    src={
+                      appointment.user.avatar_url
+                        ? appointment.user.avatar_url
+                        : 'https://api.adorable.io/avatars/60/abott@adorable.png'
+                    }
+                    alt={appointment.user.name}
+                  />
 
-                <strong>Felipe Pichl</strong>
-              </div>
-            </Appointment>
-
-            <Appointment>
-              <span>
-                <FiClock />
-                08:00
-              </span>
-
-              <div>
-                <img
-                  src="https://avatars3.githubusercontent.com/u/22602639?s=460&u=2c1bec46e256602d1dd5f173b152233fc58f2855&v=4"
-                  alt="Felipe Pichl"
-                />
-
-                <strong>Felipe Pichl</strong>
-              </div>
-            </Appointment>
+                  <strong>{appointment.user.name}</strong>
+                </div>
+              </Appointment>
+            ))}
           </Section>
 
           <Section>
             <strong>Tarde</strong>
 
-            <Appointment>
-              <span>
-                <FiClock />
-                08:00
-              </span>
+            {afternoonAppointments.map((appointment) => (
+              <Appointment key={appointment.id}>
+                <span>
+                  <FiClock />
+                  {appointment.hourFormatted}
+                </span>
 
-              <div>
-                <img
-                  src="https://avatars3.githubusercontent.com/u/22602639?s=460&u=2c1bec46e256602d1dd5f173b152233fc58f2855&v=4"
-                  alt="Felipe Pichl"
-                />
+                <div>
+                  <img
+                    src={
+                      appointment.user.avatar_url
+                        ? appointment.user.avatar_url
+                        : 'https://api.adorable.io/avatars/60/abott@adorable.png'
+                    }
+                    alt={appointment.user.name}
+                  />
 
-                <strong>Felipe Pichl</strong>
-              </div>
-            </Appointment>
+                  <strong>{appointment.user.name}</strong>
+                </div>
+              </Appointment>
+            ))}
           </Section>
         </Schedule>
         <Calendar>
