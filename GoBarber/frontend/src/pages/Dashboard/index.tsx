@@ -3,7 +3,7 @@ import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
 import { FiPower, FiClock } from 'react-icons/fi';
-import { date } from 'yup';
+
 import {
   Container,
   Header,
@@ -48,7 +48,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     api
-      .post(`/providers/${user.id}/month-availability`, {
+      .get(`/providers/${user.id}/month-availability`, {
         params: {
           year: currentMonth.getFullYear(),
           month: currentMonth.getMonth() + 1,
