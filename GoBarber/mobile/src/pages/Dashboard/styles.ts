@@ -27,7 +27,7 @@ export const HeaderTitle = styled.Text`
 
 export const UserName = styled.Text`
   color: #f49000;
-  font-family: 'RobotoSlab-Midium';
+  font-family: 'RobotoSlab-Medium';
 `;
 
 export const ProfileButton = styled.TouchableOpacity``;
