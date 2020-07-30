@@ -6,6 +6,7 @@ export const Container = styled.ScrollView`
   /* justify-content: center; */
   padding: 0 30px ${Platform.OS === 'android' ? 150 : 100}px;
   position: relative;
+  margin-bottom: 20px;
 `;
 
 export const BackButton = styled.TouchableOpacity`
