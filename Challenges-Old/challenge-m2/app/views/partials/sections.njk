@@ -1,0 +1,57 @@
+<section id="main">
+  <div class="container">
+    <header>
+      <h2>{{ currentProject.title }}</h2>
+      <div class="addon">
+        <form action="/app/projects/{{ currentProject.id }}?_method=DELETE" method="POST">
+          <button class="btn btn-danger" type="submit">Excluir projeto</button>
+        </form>
+      </div>
+    </header>
+
+    <section id="content">
+      <nav>
+        <div class="sessions">
+          {% for section in sections %}
+            <a href="/app/projects/{{ activeProject }}/sections/{{ section.id }}"
+              class="{% if section.id == activeSection %}active{% endif %}">
+              {{ section.title }}
+            </a>
+          {% endfor %}
+        </div>
+        <form action="" method="POST">
+          <input type="text" name="title" id="titleIn" placeholder="Nova seção">
+          <button type="submit" class="btn" data-modal-open="#new-section" data-target="#new-section">
+            <img src="/img/plus.svg">
+          </button>
+        </form>
+      </nav>
+
+      <article>
+        <div class="project-header">
+          <h1>{{ currentSection.title }}</h1>
+          <form action="/app/projects/{{ activeProject }}/sections/{{ currentSection.id }}?_method=DELETE" method="POST">
+           <div class="{% if section.id == activeSection %}hidden{% endif %}">
+            <button class="button" type="submit">Remover seção</button>
+           </div>
+          </form>
+        </div>
+        <p>{{ currentSection.formattedContent | safe }}</p>
+      </article>
+
+    </section>
+  </div>
+</section>
+
+<div class="modal" id="new-section">
+  <form class="modal-content" method="POST" action="/app/projects/{{ currentProject.id }}/sections/create">
+    <input type="text" name="title" id="titleOut" placeholder="Título do sessão"/>
+
+    <div class="content-container">
+      <textarea name="content" class="mde" placeholder="Conteúdo da Sessão"></textarea>
+    </div>
+
+    <button type="submit">SALVAR SESSAO</button>
+    <a href="#" data-modal-close="#new-section">CANCELAR</a>
+  </form>
+</div>
