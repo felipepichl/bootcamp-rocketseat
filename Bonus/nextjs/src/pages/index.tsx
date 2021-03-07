@@ -23,6 +23,13 @@ export default function Home({ recommendedProducts }: IHomeProps) {
     })
   }, [])
   */
+
+  async function handleSum() {
+    const { sum } = (await import('../lib/math')).default;
+
+    alert(sum(3, 5));
+  }
+
   return (
     <div>
       <Title>Products</Title>
@@ -37,6 +44,8 @@ export default function Home({ recommendedProducts }: IHomeProps) {
           })
         }
       </ul>
+
+      <button onClick={handleSum}>Sum!</button>
     </div>
   )
 }
