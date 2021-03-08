@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { GetServerSideProps } from 'next';
-import { Title } from '../styles/pages/Home'
+import SEO from '@/components/SEO';
 
 interface IProducts {
   id: string;
@@ -32,7 +32,9 @@ export default function Home({ recommendedProducts }: IHomeProps) {
 
   return (
     <div>
-      <Title>Products</Title>
+      <SEO title="DevCommerce - Your better E-Comerce"/>
+
+      <title>Products</title>
       <ul>
         {
           recommendedProducts.map(recommendedProduct => {
