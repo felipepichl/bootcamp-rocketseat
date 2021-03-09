@@ -32,7 +32,11 @@ export default function Home({ recommendedProducts }: IHomeProps) {
 
   return (
     <div>
-      <SEO title="DevCommerce - Your better E-Comerce"/>
+      <SEO 
+        title="DevCommerce - Your better E-Comerce"
+        image="boost.png"
+        shouldExcludeTitleSiffix      
+      />
 
       <title>Products</title>
       <ul>
