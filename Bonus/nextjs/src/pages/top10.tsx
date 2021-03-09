@@ -12,6 +12,8 @@ interface ITop10Props {
 export default function Top10({ products }: ITop10Props) {
   return (
     <div>
+
+      <title>Top10</title>
       <ul>
         {
           products.map(product => {
