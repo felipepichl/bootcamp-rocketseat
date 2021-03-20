@@ -4,10 +4,7 @@ import { Router } from 'express';
  * Controllers
  */
 
-/**
- * Exemple
- * import SessionController from '../app/controllers/SessionController';
- */
+import UserController from '../app/controllers/UserController';
 
 const routes = new Router();
 
@@ -25,9 +22,6 @@ routes.get('/', (req, res) => {
  * Routes
  */
 
-/**
- * Exemple
- * routes.post('/sessions', SessionController.store);
- */
+routes.post('/users', UserController.store);
 
 export default routes;
