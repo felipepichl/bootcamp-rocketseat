@@ -5,23 +5,11 @@ import { Router } from 'express';
  */
 
 import UserController from '../app/controllers/UserController';
+import SessionController from '../app/controllers/SessionController';
 
 const routes = new Router();
 
-/**
- * Exemple Route for test, you should remove this code snippet.
- */
-routes.get('/', (req, res) => {
-  return res.json({ message: 'hello world' });
-});
-/**
- * The message "hello word" should be see in your browser.
- */
-
-/**
- * Routes
- */
-
 routes.post('/users', UserController.store);
+routes.post('/sessions', SessionController.store);
 
 export default routes;
